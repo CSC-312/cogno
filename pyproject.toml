@@ -8,3 +8,10 @@ dependencies = [
     "chainlit==2.6.3",
     "ollama==0.5.1",
 ]
+
+[dependency-groups]
+dev = [
+    "lefthook>=1.12.2",
+    "ruff>=0.12.7",
+    "ty>=0.0.1a16",
+]

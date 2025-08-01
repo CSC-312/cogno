@@ -1,0 +1,23 @@
+name: Code Quality
+on: [push]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Create virtual environment
+        run: uv venv
+      - name: Install dependencies
+        run: uv sync
+      - run: uvx ruff check .
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+      - name: Create virtual environment
+        run: uv venv
+      - name: Install dependencies
+        run: uv sync
+      - run: uvx ruff format .
