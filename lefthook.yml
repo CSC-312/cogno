@@ -1,0 +1,10 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - name: lint
+      glob: "*.py"
+      run: uvx ruff lint .
+
+    - name: format
+      glob: "*.py"
+      run: uvx ruff format .
