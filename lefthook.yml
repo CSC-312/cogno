@@ -3,7 +3,7 @@ pre-commit:
   jobs:
     - name: lint
       glob: "*.py"
-      run: uvx ruff lint .
+      run: uvx ruff check .
 
     - name: format
       glob: "*.py"
