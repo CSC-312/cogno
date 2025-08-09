@@ -1,6 +1,5 @@
 import chainlit as cl
 from ollama import AsyncClient
-import time
 
 # Initialize Ollama client
 ollama = AsyncClient(host="http://localhost:11434")
@@ -19,7 +18,6 @@ async def chat_profile():
 
 @cl.on_message
 async def on_message(msg: cl.Message):
-    start = time.time()
     stream = await ollama.chat(
         model="qwen3:0.6b",
         messages=[
@@ -27,30 +25,13 @@ async def on_message(msg: cl.Message):
             *cl.chat_context.to_openai(),
         ],
         stream=True,
+        think=False,
     )
+    final_answer = cl.Message(content="")
 
-    thinking = False
+    async for chunk in stream:
+        content = chunk["message"]["content"]
 
-    # Streaming the thinking
-    async with cl.Step(name="Thinking") as thinking_step:
-        final_answer = cl.Message(content="")
-
-        async for chunk in stream:
-            content = chunk["message"]["content"]
-            if content == "<think>":
-                thinking = True
-                continue
-
-            if content == "</think>":
-                thinking = False
-                thought_for = round(time.time() - start)
-                thinking_step.name = f"Thought for {thought_for}s"
-                await thinking_step.update()
-                continue
-
-            if thinking:
-                await thinking_step.stream_token(content)
-            else:
-                await final_answer.stream_token(content)
+        await final_answer.stream_token(content)
 
     await final_answer.send()
