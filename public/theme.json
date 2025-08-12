@@ -1,8 +1,23 @@
 {
   "custom_fonts": [
-    { "name": "Geist", "src": "/fonts/Geist/Geist-Variable.woff2", "weight": "100 900", "style": "normal" },
-    { "name": "Castoro", "src": "/fonts/Castoro/Castoro-Regular.woff2", "weight": "400", "style": "normal" },
-    { "name": "Google Sans Code", "src": "/fonts/GoogleSansCode/GoogleSansCode-Regular.woff2", "weight": "400", "style": "normal" }
+    {
+      "name": "Geist",
+      "src": "/fonts/Geist/Geist-Variable.woff2",
+      "weight": "100 900",
+      "style": "normal"
+    },
+    {
+      "name": "Castoro",
+      "src": "/fonts/Castoro/Castoro-Regular.woff2",
+      "weight": "400",
+      "style": "normal"
+    },
+    {
+      "name": "Google Sans Code",
+      "src": "/fonts/GoogleSansCode/GoogleSansCode-Regular.woff2",
+      "weight": "400",
+      "style": "normal"
+    }
   ],
   "variables": {
     "light": {
@@ -41,7 +56,7 @@
       "--font-sans": "Geist, ui-sans-serif, sans-serif, system-ui",
       "--font-serif": "Castoro, ui-serif, serif",
       "--font-mono": "Google Sans Code, ui-monospace, monospace",
-      "--radius": "0.675rem",
+      "--radius": "1rem",
       "--shadow-2xs": "0px 4px 10px 0px hsl(240 30% 25% / 0.06)",
       "--shadow-xs": "0px 4px 10px 0px hsl(240 30% 25% / 0.06)",
       "--shadow-sm": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 1px 2px -1px hsl(240 30% 25% / 0.12)",
@@ -89,7 +104,7 @@
       "--font-sans": "Geist, ui-sans-serif, sans-serif, system-ui",
       "--font-serif": "Castoro, ui-serif, serif",
       "--font-mono": "Google Sans Code, ui-monospace, monospace",
-      "--radius": "2.275rem",
+      "--radius": "1rem",
       "--shadow-2xs": "0px 4px 10px 0px hsl(240 30% 25% / 0.06)",
       "--shadow-xs": "0px 4px 10px 0px hsl(240 30% 25% / 0.06)",
       "--shadow-sm": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 1px 2px -1px hsl(240 30% 25% / 0.12)",

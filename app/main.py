@@ -15,6 +15,31 @@ async def chat_profile():
         )
     ]
 
+@cl.set_starters
+async def set_starters():
+    return [
+        cl.Starter(
+            label="Help",
+            message="Where can i make an affidavit?",
+            icon="public/faq.svg"
+        ),
+        cl.Starter(
+            label="Give",
+            message="Where can I donate food to other students?",
+            icon="public/honest.svg"
+        ),
+        cl.Starter(
+            label="Know",
+            message="Who is the vice chancellor?",
+            icon="public/staff.svg"
+        ),
+        cl.Starter(
+            label="Contact",
+            message="How do i get hold of residencially services?",
+            icon="public/contact.svg"
+        ),
+    ]
+
 
 @cl.on_message
 async def on_message(msg: cl.Message):
