@@ -1,8 +1,21 @@
 import chainlit as cl
+from typing import Dict, Optional
 from ollama import AsyncClient
 
-# Initialize Ollama client
 ollama = AsyncClient(host="http://localhost:11434")
+
+
+@cl.oauth_callback
+def oauth_callback(
+    provider_id: str,
+    token: str,
+    raw_user_data: Dict[str, str],
+    default_user: cl.User,
+) -> Optional[cl.User]:
+    if provider_id == "google":
+        if raw_user_data["hd"] == "myuwc.ac.za/":
+            return default_user
+    return None
 
 
 # Declare Chat Profile
@@ -15,28 +28,27 @@ async def chat_profile():
         )
     ]
 
+
 @cl.set_starters
 async def set_starters():
     return [
         cl.Starter(
             label="Help",
             message="Where can i make an affidavit?",
-            icon="public/faq.svg"
+            icon="public/faq.svg",
         ),
         cl.Starter(
             label="Give",
             message="Where can I donate food to other students?",
-            icon="public/honest.svg"
+            icon="public/honest.svg",
         ),
         cl.Starter(
-            label="Know",
-            message="Who is the vice chancellor?",
-            icon="public/staff.svg"
+            label="Know", message="Who is the vice chancellor?", icon="public/staff.svg"
         ),
         cl.Starter(
             label="Contact",
             message="How do i get hold of residencially services?",
-            icon="public/contact.svg"
+            icon="public/contact.svg",
         ),
     ]
 

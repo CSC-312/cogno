@@ -5,6 +5,10 @@ pre-commit:
       glob: "*.py"
       run: uvx ruff check .
 
+    - name: fix
+      glob: "*.py"
+      run: uvx ruff check --fix .
+
     - name: format
       glob: "*.py"
       run: uvx ruff format .
