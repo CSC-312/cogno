@@ -19,7 +19,7 @@ allow_origins = ["*"]
 unsafe_allow_html = false
 
 # Process and display mathematical expressions. This can clash with "$" characters in messages.
-latex = false
+latex = true
 
 # Autoscroll new user messages at the top of the window
 user_message_autoscroll = true
@@ -32,7 +32,7 @@ edit_message = true
 
 # Authorize users to spontaneously upload files with messages
 [features.spontaneous_file_upload]
-enabled = true
+enabled = false
 # Define accepted file types using MIME types
 # Examples:
 # 1. For specific file types:
@@ -62,7 +62,7 @@ allowed_executables = ["npx", "uvx"]
 
 [UI]
 # Name of the assistant.
-name = "Assistant"
+name = "Cogno"
 
 # default_theme = "dark"
 
