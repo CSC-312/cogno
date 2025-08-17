@@ -12,10 +12,7 @@ def oauth_callback(
     raw_user_data: Dict[str, str],
     default_user: cl.User,
 ) -> Optional[cl.User]:
-    if provider_id == "google":
-        if raw_user_data["hd"] == "myuwc.ac.za/":
-            return default_user
-    return None
+    return default_user
 
 
 # Declare Chat Profile
