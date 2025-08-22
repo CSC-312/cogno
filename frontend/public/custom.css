@@ -1,0 +1,11 @@
+/* Make the starter buttons larger */
+[id^=starter-] {
+    height: 3rem !important;
+    justify-content: center !important;
+}
+
+/* Make the icons inside the buttons larger */
+[id^=starter-] img {
+    height: 1.5rem !important;
+    width: 1.5rem !important;
+}
