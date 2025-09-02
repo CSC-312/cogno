@@ -1,21 +1,60 @@
+version: "3.9"
+
 services:
   postgres:
     image: postgres:16
-    volumes:
-      - ./.data/postgres:/var/lib/postgresql/data
+    restart: always
     environment:
-      - POSTGRES_USER=${POSTGRES_USER:-root}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-root}
-      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-root}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-root}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
     ports:
-      - ${POSTGRES_PORT:-5432}:5432
-  ollama:
-    image: alpine/ollama:latest
-    ports:
-      - 11434:11434
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - ~/.ollama/root/.ollama:/var/lib/ollama
-    entrypoint: /bin/sh
-    command: -c "ollama serve & sleep 5 && ollama pull qwen3:0.6b && wait"
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck: # <-- ADDED HEALTHCHECK
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-root} -d ${POSTGRES_DB:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ollama:
+    image: ollama/ollama:latest # <-- Changed from alpine/ollama
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/var/lib/ollama
+    # Removed entrypoint override. Let the image's default CMD run.
+
+  frontend:
+    build: .
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql://root:root@postgres:5432/postgres}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
+      OAUTH_GOOGLE_CLIENT_ID: ${OAUTH_GOOGLE_CLIENT_ID}
+      OAUTH_GOOGLE_CLIENT_SECRET: ${OAUTH_GOOGLE_CLIENT_SECRET}
+      OAUTH_GOOGLE_REDIRECT_URI: ${OAUTH_GOOGLE_REDIRECT_URI}
+      CHAINLIT_AUTH_SECRET: ${CHAINLIT_AUTH_SECRET}
+    depends_on: # <-- UPDATED depends_on with condition
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: >
+      sh -c "
+        echo 'Waiting for DB to be ready...' &&
+        npx prisma migrate deploy &&
+        echo 'Starting Chainlit...' &&
+        uv run chainlit run frontend/main.py --host 0.0.0.0 --port 8000
+      "
+
 volumes:
-  ollama-data:
+  postgres_data:
+  ollama_data:
