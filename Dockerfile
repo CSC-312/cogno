@@ -1,4 +1,3 @@
-# Use Python 3.12 slim as base image
 FROM python:3.12-slim-bookworm
 
 # Install Node.js (required for Prisma) and other utilities
@@ -17,7 +16,7 @@ WORKDIR /app
 
 # Copy Python dependency files first (better caching)
 COPY pyproject.toml uv.lock ./
-RUN uv sync --locked
+RUN uv sync --no-dev --locked
 
 # Copy Node.js dependency files first (better caching)
 COPY package*.json ./

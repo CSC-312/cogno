@@ -12,20 +12,27 @@ services:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    healthcheck: # <-- ADDED HEALTHCHECK
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-root} -d ${POSTGRES_DB:-postgres}"]
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-root} -d ${POSTGRES_DB:-postgres}",
+        ]
       interval: 5s
       timeout: 5s
       retries: 5
 
   ollama:
-    image: ollama/ollama:latest # <-- Changed from alpine/ollama
+    image: alpine/ollama:latest
     restart: always
     ports:
       - "11434:11434"
     volumes:
       - ollama_data:/var/lib/ollama
-    # Removed entrypoint override. Let the image's default CMD run.
+    environment:
+      OLLAMA_MODEL: ${OLLAMA_MODEL}
+    entrypoint: /bin/sh
+    command: -c "ollama serve & sleep 5 && ollama pull ${OLLAMA_MODEL} && wait"
 
   frontend:
     build: .
@@ -33,13 +40,13 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: ${DATABASE_URL:-postgresql://root:root@postgres:5432/postgres}
-      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://ollama:11434}
+      DATABASE_URL: ${DATABASE_URL}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL}
       OAUTH_GOOGLE_CLIENT_ID: ${OAUTH_GOOGLE_CLIENT_ID}
       OAUTH_GOOGLE_CLIENT_SECRET: ${OAUTH_GOOGLE_CLIENT_SECRET}
       OAUTH_GOOGLE_REDIRECT_URI: ${OAUTH_GOOGLE_REDIRECT_URI}
       CHAINLIT_AUTH_SECRET: ${CHAINLIT_AUTH_SECRET}
-    depends_on: # <-- UPDATED depends_on with condition
+    depends_on:
       postgres:
         condition: service_healthy
       ollama:

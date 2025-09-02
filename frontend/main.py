@@ -1,8 +1,9 @@
+import os
 import chainlit as cl
 from typing import Dict, Optional
 from ollama import AsyncClient
 
-ollama = AsyncClient(host="http://localhost:11434")
+ollama = AsyncClient(host=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"))
 
 
 @cl.oauth_callback
@@ -53,7 +54,7 @@ async def set_starters():
 @cl.on_message
 async def on_message(msg: cl.Message):
     stream = await ollama.chat(
-        model="qwen3:0.6b",
+        model="gemma3:270m",
         messages=[
             {"role": "system", "content": "You are an helpful assistant"},
             *cl.chat_context.to_openai(),
