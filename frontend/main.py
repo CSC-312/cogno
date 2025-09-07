@@ -3,7 +3,10 @@ import chainlit as cl
 from typing import Dict, Optional
 from ollama import AsyncClient
 
-ollama = AsyncClient(host=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"))
+ollama = AsyncClient(
+    host=os.getenv("OLLAMA_BASE_URL"),
+    headers={"Authorization": f"Bearer {os.getenv('OLLAMA_API_KEY')}"},
+)
 
 
 @cl.oauth_callback
@@ -16,7 +19,6 @@ def oauth_callback(
     return default_user
 
 
-# Declare Chat Profile
 @cl.set_chat_profiles
 async def chat_profile():
     return [
@@ -45,7 +47,7 @@ async def set_starters():
         ),
         cl.Starter(
             label="Contact",
-            message="How do i get hold of residencially services?",
+            message="How do i get hold of residential services?",
             icon="public/contact.svg",
         ),
     ]
@@ -54,13 +56,12 @@ async def set_starters():
 @cl.on_message
 async def on_message(msg: cl.Message):
     stream = await ollama.chat(
-        model="gemma3:270m",
+        model=os.getenv("OLLAMA_MODEL"),
         messages=[
             {"role": "system", "content": "You are an helpful assistant"},
             *cl.chat_context.to_openai(),
         ],
         stream=True,
-        think=False,
     )
     final_answer = cl.Message(content="")
 
