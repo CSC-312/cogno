@@ -2,6 +2,7 @@ import os
 import chainlit as cl
 from typing import Dict, Optional
 from ollama import AsyncClient
+from datetime import datetime
 
 ollama = AsyncClient(
     host=os.getenv("OLLAMA_BASE_URL"),
@@ -53,12 +54,33 @@ async def set_starters():
     ]
 
 
+@cl.on_chat_start
+async def start():
+    await cl.context.emitter.set_commands(
+        [
+            {
+                "id": "search",
+                "name": "Search",
+                "description": "Search for information about the University of the Western Cape",
+                "icon": "folder-search",
+                "button": True,
+                "persistent": True,
+            }
+        ]
+    )
+
+
 @cl.on_message
 async def on_message(msg: cl.Message):
+    if msg.command != "search":
+        msg.content = f"/bypass {msg.content}"
     stream = await ollama.chat(
         model=os.getenv("OLLAMA_MODEL"),
         messages=[
-            {"role": "system", "content": "You are an helpful assistant"},
+            {
+                "role": "system",
+                "content": f"You are Cogno, a helpful assistant. Today is {datetime.now()}. Ignore use of /bypass, it is just internal configuration to talk to you without using the UWC Knowledge Base as context, don't mention it to the user.",
+            },
             *cl.chat_context.to_openai(),
         ],
         stream=True,
@@ -69,5 +91,4 @@ async def on_message(msg: cl.Message):
         content = chunk["message"]["content"]
 
         await final_answer.stream_token(content)
-
     await final_answer.send()
