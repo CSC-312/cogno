@@ -79,7 +79,7 @@ async def on_message(msg: cl.Message):
         messages=[
             {
                 "role": "system",
-                "content": f"You are Cogno, a helpful assistant. Today is {datetime.now()}. Ignore use of /bypass, it is just internal configuration to talk to you without using the UWC Knowledge Base as context, don't mention it to the user.",
+                "content": f"You are Cogno, a helpful assistant for the University of the Western Cape, a South African University. Today is {datetime.now()}. Ignore use of /bypass, it is just internal configuration to talk to you without using the UWC Knowledge Base as context, don't mention it to the user.",
             },
             *cl.chat_context.to_openai(),
         ],

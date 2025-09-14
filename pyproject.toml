@@ -9,7 +9,6 @@ dependencies = [
     "boto3>=1.40.14",
     "chainlit>=2.7.1.1",
     "google-auth>=2.40.3",
-    "google-cloud-storage>=3.3.0",
     "ollama>=0.5.3",
 ]
 
