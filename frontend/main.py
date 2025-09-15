@@ -1,8 +1,9 @@
 import os
-import chainlit as cl
-from typing import Dict, Optional
-from ollama import AsyncClient
 from datetime import datetime
+from typing import Any, Dict, Optional
+
+import chainlit as cl
+from ollama import AsyncClient
 
 ollama = AsyncClient(
     host=os.getenv("OLLAMA_BASE_URL"),
@@ -20,14 +21,25 @@ def oauth_callback(
     return default_user
 
 
-@cl.set_chat_profiles
-async def chat_profile():
-    return [
-        cl.ChatProfile(
-            name="UWC_Chat",
-            markdown_description="Chatbot with **UWC** brand colors",
-        )
-    ]
+@cl.on_shared_thread_view
+async def on_shared_thread_view(thread: Dict[str, Any], current_user: cl.User) -> bool:
+    # Deny if user not on same team
+    owner_team = thread.get("metadata", {}).get("team")
+    user_team = current_user.metadata.get("team")
+    if owner_team != user_team:
+        return False
+
+    shared_at = thread.get("metadata", {}).get("shared_at")
+    if shared_at:
+        thread["steps"] = [
+            s for s in thread.get("steps", []) if s.get("created_at") <= shared_at
+        ]
+
+    for step in thread.get("steps", []):
+        if step.get("metadata", {}).get("sensitive"):
+            step["output"] = "[REDACTED]"
+
+    return True
 
 
 @cl.set_starters
@@ -35,7 +47,7 @@ async def set_starters():
     return [
         cl.Starter(
             label="Help",
-            message="Where can i make an affidavit?",
+            message="How do I apply to UWC, using NSFAS",
             icon="public/faq.svg",
         ),
         cl.Starter(
@@ -79,7 +91,10 @@ async def on_message(msg: cl.Message):
         messages=[
             {
                 "role": "system",
-                "content": f"You are Cogno, a helpful assistant for the University of the Western Cape, a South African University. Today is {datetime.now()}. Ignore use of /bypass, it is just internal configuration to talk to you without using the UWC Knowledge Base as context, don't mention it to the user.",
+                "content": f"""You are Cogno, a helpful assistant for the University of the Western Cape, a South African University.
+                               Today is {datetime.now()}. Ignore use of /bypass, it is just internal configuration to talk to you without using the UWC Knowledge Base as context, don't mention it to the user.
+                               Do not include citations or references in your responses under any circumstances, as it is too verbose.
+                            """,
             },
             *cl.chat_context.to_openai(),
         ],
