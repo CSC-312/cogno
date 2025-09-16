@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 # Use Python 3.12 slim as base image
+=======
+>>>>>>> main
 FROM python:3.12-slim-bookworm
 
 # Install Node.js (required for Prisma) and other utilities
@@ -17,7 +20,11 @@ WORKDIR /app
 
 # Copy Python dependency files first (better caching)
 COPY pyproject.toml uv.lock ./
+<<<<<<< HEAD
 RUN uv sync --locked
+=======
+RUN uv sync --no-dev --locked
+>>>>>>> main
 
 # Copy Node.js dependency files first (better caching)
 COPY package*.json ./
@@ -50,4 +57,8 @@ ENV PYTHONPATH=/app
 EXPOSE 8000
 
 # Run Chainlit app
+<<<<<<< HEAD
 CMD ["uv", "run", "chainlit", "run", "frontend/main.py", "--host", "0.0.0.0", "--port", "8000"]
+=======
+CMD ["uv", "run", "chainlit", "run", "frontend/main.py", "--host", "0.0.0.0", "--port", "8000"]
+>>>>>>> main

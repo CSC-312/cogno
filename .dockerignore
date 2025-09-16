@@ -8,4 +8,8 @@
 .gitignore
 README.md
 Dockerfile
+<<<<<<< HEAD
 docker-compose.yml
+=======
+compose.yml
+>>>>>>> main
