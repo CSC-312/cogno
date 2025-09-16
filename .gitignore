@@ -1,5 +1,6 @@
 # Env vars.
 .env
+secrets.env
 
 # Where we store PostgreSQL data.
 .data
