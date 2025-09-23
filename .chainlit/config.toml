@@ -37,6 +37,7 @@ cot = "full"
 custom_css = "/public/custom.css"
 alert_style = "modern"
 login_page_image = "/public/logo.jpg"
+login_page_image_filter = "brightness-20 blur-sm"
 logo_file_url = ""
 default_avatar_file_url = ""
 
