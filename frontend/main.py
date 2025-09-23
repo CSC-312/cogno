@@ -30,22 +30,34 @@ async def on_shared_thread_view(thread: Dict[str, Any], current_user: cl.User) -
 async def set_starters():
     return [
         cl.Starter(
-            label="Help",
-            message="How do I apply to UWC, using NSFAS",
-            icon="public/faq.svg",
+            label="Apply",
+            message="How do I apply to the University of the Western Cape?",
+            icon="public/square-academic-cap-svgrepo-com.svg",
+            command="search",
         ),
         cl.Starter(
-            label="Give",
-            message="Where can I donate food to other students?",
-            icon="public/honest.svg",
+            label="Eat",
+            message="How where can I find places to eat on campus?",
+            icon="public/donut-bitten-svgrepo-com.svg",
+            command="search",
         ),
         cl.Starter(
-            label="Know", message="Who is the vice chancellor?", icon="public/staff.svg"
+            label="Find",
+            message="Where is the Life Sciences Building on campus?",
+            icon="public/map-point-school-svgrepo-com.svg",
+            command="search",
         ),
         cl.Starter(
-            label="Contact",
-            message="How do i get hold of residential services?",
-            icon="public/contact.svg",
+            label="Call",
+            message="What is the phone number of residential services?",
+            icon="public/call-chat-svgrepo-com.svg",
+            command="search",
+        ),
+        cl.Starter(
+            label="Sports",
+            message="What sports are offered at the University of the Western Cape?",
+            icon="public/basketball-svgrepo-com.svg",
+            command="search",
         ),
     ]
 
