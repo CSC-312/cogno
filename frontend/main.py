@@ -23,22 +23,6 @@ def oauth_callback(
 
 @cl.on_shared_thread_view
 async def on_shared_thread_view(thread: Dict[str, Any], current_user: cl.User) -> bool:
-    # Deny if user not on same team
-    owner_team = thread.get("metadata", {}).get("team")
-    user_team = current_user.metadata.get("team")
-    if owner_team != user_team:
-        return False
-
-    shared_at = thread.get("metadata", {}).get("shared_at")
-    if shared_at:
-        thread["steps"] = [
-            s for s in thread.get("steps", []) if s.get("created_at") <= shared_at
-        ]
-
-    for step in thread.get("steps", []):
-        if step.get("metadata", {}).get("sensitive"):
-            step["output"] = "[REDACTED]"
-
     return True
 
 
@@ -46,22 +30,34 @@ async def on_shared_thread_view(thread: Dict[str, Any], current_user: cl.User) -
 async def set_starters():
     return [
         cl.Starter(
-            label="Help",
-            message="How do I apply to UWC, using NSFAS",
-            icon="public/faq.svg",
+            label="Apply",
+            message="How do I apply to the University of the Western Cape?",
+            icon="public/square-academic-cap-svgrepo-com.svg",
+            command="search",
         ),
         cl.Starter(
-            label="Give",
-            message="Where can I donate food to other students?",
-            icon="public/honest.svg",
+            label="Eat",
+            message="How where can I find places to eat on campus?",
+            icon="public/donut-bitten-svgrepo-com.svg",
+            command="search",
         ),
         cl.Starter(
-            label="Know", message="Who is the vice chancellor?", icon="public/staff.svg"
+            label="Find",
+            message="Where is the Life Sciences Building on campus?",
+            icon="public/map-point-school-svgrepo-com.svg",
+            command="search",
         ),
         cl.Starter(
-            label="Contact",
-            message="How do i get hold of residential services?",
-            icon="public/contact.svg",
+            label="Call",
+            message="What is the phone number of residential services?",
+            icon="public/call-chat-svgrepo-com.svg",
+            command="search",
+        ),
+        cl.Starter(
+            label="Sports",
+            message="What sports are offered at the University of the Western Cape?",
+            icon="public/basketball-svgrepo-com.svg",
+            command="search",
         ),
     ]
 
@@ -93,7 +89,9 @@ async def on_message(msg: cl.Message):
                 "role": "system",
                 "content": f"""You are Cogno, a helpful assistant for the University of the Western Cape, a South African University.
                                Today is {datetime.now()}. Ignore use of /bypass, it is just internal configuration to talk to you without using the UWC Knowledge Base as context, don't mention it to the user.
-                               Do not include citations or references in your responses under any circumstances, as it is too verbose.
+                               Do not include citations or references in your responses under any circumstances, as it is too verbose. Your answers must be structured neatly. Do not make reference to this instruction or knowledge base.
+                               Your aim to to help with University of the Western Cape related queries.
+
                             """,
             },
             *cl.chat_context.to_openai(),
