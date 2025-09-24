@@ -11,6 +11,14 @@ user_session_timeout = 1296000  # 15 days
 # Enable third parties caching (e.g., LangChain cache)
 cache = false
 
+# Whether to persist user environment variables (API keys) to the database
+# Set to true to store user env vars in DB, false to exclude them for security
+persist_user_env = false
+
+# Whether to mask user environment variables (API keys) in the UI with password type
+# Set to true to show API keys as ***, false to show them as plain text
+mask_user_env = false
+
 # Authorized origins
 allow_origins = ["*"]
 
@@ -30,6 +38,13 @@ auto_tag_thread = true
 # Allow users to edit their own messages
 edit_message = true
 
+# Allow users to share threads (backend + UI). Requires an app-defined on_shared_thread_view callback.
+allow_thread_sharing = false
+
+[features.slack]
+# Add emoji reaction when message is received (requires reactions:write OAuth scope)
+reaction_on_message_received = false
+
 # Authorize users to spontaneously upload files with messages
 [features.spontaneous_file_upload]
     enabled = true
@@ -47,10 +62,19 @@ edit_message = true
     max_size_mb = 500
 
 [features.audio]
+    # Enable audio features
+    enabled = false
     # Sample rate of the audio
     sample_rate = 24000
 
+[features.mcp]
+    # Enable Model Context Protocol (MCP) features
+    enabled = false
+
 [features.mcp.sse]
+    enabled = true
+
+[features.mcp.streamable-http]
     enabled = true
 
 [features.mcp.stdio]
@@ -123,4 +147,4 @@ default_avatar_file_url = ""
 #     url = "https://github.com/Chainlit/chainlit/issues"
 
 [meta]
-generated_by = "2.6.3"
+generated_by = "2.8.0"
