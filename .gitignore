@@ -1,6 +1,4 @@
 .env
-
-# Where we store PostgreSQL data.
 .data
 
 # Node modules.
