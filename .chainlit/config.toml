@@ -14,10 +14,10 @@ edit_message = true
 allow_thread_sharing = true
 
 [features.spontaneous_file_upload]
-enabled = false
-accept = ["*/*"]
-max_files = 20
-max_size_mb = 500
+enabled = true
+accept = ["image/*", "application/pdf"]
+max_files = 3
+max_size_mb = 2
 
 [features.audio]
 sample_rate = 24000

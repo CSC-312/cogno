@@ -1,9 +1,9 @@
-FROM python:3.12-slim-bookworm
+FROM python:3.13-slim-bookworm
 
 # Install Node.js (required for Prisma) and other utilities
 RUN apt-get update && apt-get install -y \
     curl \
-    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -20,7 +20,7 @@ RUN uv sync --no-dev --locked
 
 # Copy Node.js dependency files first (better caching)
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
 # Copy Prisma schema
 COPY prisma/ ./prisma/
