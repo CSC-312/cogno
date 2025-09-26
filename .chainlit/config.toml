@@ -21,6 +21,7 @@ max_files = 6
 max_size_mb = 2
 
 [features.audio]
+enabled = true
 sample_rate = 24000
 
 [features.mcp.sse]
@@ -34,7 +35,7 @@ allowed_executables = ["npx", "uvx"]
 name = "Cogno"
 default_theme = "dark"
 default_sidebar_state = "open"
-cot = "full"
+cot = "tool_call"
 custom_css = "/public/custom.css"
 alert_style = "modern"
 login_page_image = "/public/logo.jpg"

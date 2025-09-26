@@ -9,7 +9,9 @@ dependencies = [
     "boto3>=1.40.14",
     "chainlit>=2.7.1.1",
     "google-auth>=2.40.3",
+    "numpy>=2.3.3",
     "ollama>=0.5.3",
+    "openai>=1.109.1",
 ]
 
 [dependency-groups]
