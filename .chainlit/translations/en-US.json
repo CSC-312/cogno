@@ -90,8 +90,8 @@
     },
     "messages": {
       "status": {
-        "using": "Using",
-        "used": "Used"
+        "using": "Transcribing",
+        "used": "Transcribed"
       },
       "actions": {
         "copy": {
