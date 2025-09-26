@@ -16,7 +16,7 @@ WORKDIR /app
 
 # Copy Python dependency files first (better caching)
 COPY pyproject.toml uv.lock ./
-RUN uv sync --no-dev --locked
+RUN uv sync --no-group dev --locked
 
 # Copy Node.js dependency files first (better caching)
 COPY package*.json ./
@@ -49,4 +49,4 @@ ENV PYTHONPATH=/app
 EXPOSE 8000
 
 # Run Chainlit app
-CMD ["uv", "run", "chainlit", "run", "frontend/main.py", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "chainlit", "run", "frontend/main.py", "-h", "--host", "0.0.0.0", "--port", "8000"]
