@@ -80,33 +80,34 @@ async def audio(audio_file):
 
 
 async def process_audio():
-    if audio_chunks := cl.user_session.get("audio_chunks"):
-        concatenated = np.concatenate(list(audio_chunks))
-        wav_buffer = io.BytesIO()
-        with wave.open(wav_buffer, "wb") as wav_file:
-            wav_file.setnchannels(1)  # mono
-            wav_file.setsampwidth(2)  # 2 bytes per sample (16-bit)
-            wav_file.setframerate(24000)  # sample rate (24kHz PCM)
-            wav_file.writeframes(concatenated.tobytes())
+    audio_chunks = cl.user_session.get("audio_chunks")
+    if not audio_chunks:
+        return
 
-        wav_buffer.seek(0)
-
-        cl.user_session.set("audio_chunks", [])
-
-    frames = wav_file.getnframes()
-    rate = wav_file.getframerate()
-
-    duration = frames / float(rate)
+    # Compute duration directly from samples
+    concatenated = np.concatenate(audio_chunks)
+    sample_rate = 24000
+    duration = concatenated.shape[0] / float(sample_rate)
     if duration <= 1.71:
+        cl.user_session.set("audio_chunks", [])
         print("The audio is too short, please try again.")
         return
 
-    audio_buffer = wav_buffer.getvalue()
+    # Now write out the WAV
+    wav_buffer = io.BytesIO()
+    with wave.open(wav_buffer, "wb") as wav_file:
+        wav_file.setnchannels(1)        # mono
+        wav_file.setsampwidth(2)        # 2 bytes per sample (16-bit)
+        wav_file.setframerate(sample_rate)  # 24 kHz PCM
+        wav_file.writeframes(concatenated.tobytes())
 
+    wav_buffer.seek(0)
+    cl.user_session.set("audio_chunks", [])
+
+    audio_buffer = wav_buffer.getvalue()
 
     whisper_input = ("audio.wav", audio_buffer, "audio/wav")
     transcription = await audio(whisper_input)
-
     user_message = cl.Message(
         content=transcription,
         author="User",
