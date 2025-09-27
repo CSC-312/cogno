@@ -84,7 +84,7 @@ async def process_audio():
     if not audio_chunks:
         return
 
-    # Compute duration directly from samples
+
     concatenated = np.concatenate(audio_chunks)
     sample_rate = 24000
     duration = concatenated.shape[0] / float(sample_rate)
@@ -93,11 +93,10 @@ async def process_audio():
         print("The audio is too short, please try again.")
         return
 
-    # Now write out the WAV
     wav_buffer = io.BytesIO()
     with wave.open(wav_buffer, "wb") as wav_file:
-        wav_file.setnchannels(1)        # mono
-        wav_file.setsampwidth(2)        # 2 bytes per sample (16-bit)
+        wav_file.setnchannels(1)  # mono
+        wav_file.setsampwidth(2)  # 2 bytes per sample (16-bit)
         wav_file.setframerate(sample_rate)  # 24 kHz PCM
         wav_file.writeframes(concatenated.tobytes())
 
@@ -108,10 +107,14 @@ async def process_audio():
 
     whisper_input = ("audio.wav", audio_buffer, "audio/wav")
     transcription = await audio(whisper_input)
+
+    selected_command = cl.user_session.get("selected_command")
+
     user_message = cl.Message(
         content=transcription,
         author="User",
         type="user_message",
+        command=selected_command,
     )
     await user_message.send()
 
@@ -157,6 +160,8 @@ async def start():
 
 @cl.on_message
 async def on_message(msg: cl.Message):
+    cl.user_session.set("selected_command", msg.command)
+
     if msg.command != "search":
         msg.content = f"/bypass {msg.content}"
     stream = await ollama.chat(
