@@ -83,8 +83,6 @@ async def process_audio():
     audio_chunks = cl.user_session.get("audio_chunks")
     if not audio_chunks:
         return
-
-
     concatenated = np.concatenate(audio_chunks)
     sample_rate = 24000
     duration = concatenated.shape[0] / float(sample_rate)
