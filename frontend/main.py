@@ -1,11 +1,11 @@
-import os
 import io
+import os
 import wave
 from datetime import datetime
 from typing import Any, Dict, Optional
 
-import numpy as np
 import chainlit as cl
+import numpy as np
 from ollama import AsyncClient
 from openai import AsyncOpenAI
 
@@ -15,6 +15,10 @@ ollama = AsyncClient(
 )
 
 whisper = AsyncOpenAI(
+    base_url=os.getenv("GROQ_BASE_URL"), api_key=os.getenv("GROQ_API_KEY")
+)
+
+groq = AsyncOpenAI(
     base_url=os.getenv("GROQ_BASE_URL"), api_key=os.getenv("GROQ_API_KEY")
 )
 
@@ -73,7 +77,7 @@ async def set_starters():
 @cl.step(type="tool", show_input=False)
 async def audio(audio_file):
     response = await whisper.audio.transcriptions.create(
-        model=os.getenv("GROQ_MODEL"), file=audio_file
+        model=os.getenv("GROQ_WHISPER_MODEL"), file=audio_file
     )
 
     return response.text
@@ -158,6 +162,27 @@ async def start():
 
 @cl.on_message
 async def on_message(msg: cl.Message):
+    if not cl.user_session.get("is_thread_renamed", False):
+        thread_name_response = await groq.chat.completions.create(
+            model=os.getenv("GROQ_MODEL"),
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"Summarize this query in MAX 5 words for a chat thread name: `{msg.content}`",
+                }
+            ],
+            temperature=0.8,
+            max_completion_tokens=50,
+            top_p=1,
+            reasoning_effort="low",
+            stream=False,
+            stop=None,
+        )
+        thread_name = thread_name_response.choices[0].message.content.strip()
+
+        await cl.context.emitter.init_thread(thread_name)
+        cl.user_session.set("is_thread_renamed", True)
+
     cl.user_session.set("selected_command", msg.command)
 
     if msg.command != "search":
