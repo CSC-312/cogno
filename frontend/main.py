@@ -59,7 +59,7 @@ async def set_starters():
         ),
         cl.Starter(
             label="Find",
-            message="Where is the Life Sciences Building on campus?",
+            message="Give me directions to UWC",
             icon="public/map-point-school-svgrepo-com.svg",
             command="search",
         ),
