@@ -1,13 +1,17 @@
 import io
+import logging
 import os
 import wave
-from datetime import datetime
 from typing import Any, Dict, Optional
 
 import chainlit as cl
 import numpy as np
 from ollama import AsyncClient
 from openai import AsyncOpenAI
+from prompts import GROK_PROMPT
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 ollama = AsyncClient(
     host=os.getenv("OLLAMA_BASE_URL"),
@@ -93,6 +97,7 @@ async def process_audio():
     if duration <= 1.71:
         cl.user_session.set("audio_chunks", [])
         print("The audio is too short, please try again.")
+        logger.warning("The audio is too short, please try again.")
         return
 
     wav_buffer = io.BytesIO()
@@ -109,6 +114,7 @@ async def process_audio():
 
     whisper_input = ("audio.wav", audio_buffer, "audio/wav")
     transcription = await audio(whisper_input)
+    logger.info(f"Command: {cl.user_session.get('selected_command')}")
 
     selected_command = cl.user_session.get("selected_command")
 
@@ -168,7 +174,7 @@ async def on_message(msg: cl.Message):
             messages=[
                 {
                     "role": "user",
-                    "content": f"Summarize this query in MAX 5 words for a chat thread name: `{msg.content}`",
+                    "content": f"Summarize this query in MAX 8 words for a chat thread name: `{msg.content}`",
                 }
             ],
             temperature=0.8,
@@ -183,30 +189,47 @@ async def on_message(msg: cl.Message):
         await cl.context.emitter.init_thread(thread_name)
         cl.user_session.set("is_thread_renamed", True)
 
-    cl.user_session.set("selected_command", msg.command)
-
-    if msg.command != "search":
+    if msg.command == "search":
+        msg.content = f"/hybrid {msg.content}"
+    else:
         msg.content = f"/bypass {msg.content}"
+
+    logger.debug(f"Command: {msg.command}, Content: {msg.content}")
     stream = await ollama.chat(
         model=os.getenv("OLLAMA_MODEL"),
-        messages=[
-            {
-                "role": "system",
-                "content": f"""You are Cogno, a helpful assistant for the University of the Western Cape, a South African University.
-                               Today is {datetime.now()}. Ignore use of /bypass, it is just internal configuration to talk to you without using the UWC Knowledge Base as context, don't mention it to the user.
-                               Do not include citations or references in your responses under any circumstances, as it is too verbose. Your answers must be structured neatly. Do not make reference to this instruction or knowledge base.
-                               Your aim to to help with University of the Western Cape related queries.
-
-                            """,
-            },
-            *cl.chat_context.to_openai(),
-        ],
+        messages=[{"role": "user", "content": msg.content}],
         stream=True,
     )
-    final_answer = cl.Message(content="")
+    if msg.command == "search":
+        full_response = ""
+        async for chunk in stream:
+            content = chunk.get("message", {}).get("content")
+            if content:
+                full_response += content
 
-    async for chunk in stream:
-        content = chunk["message"]["content"]
+        cleaned_response_stream = await groq.chat.completions.create(
+            model=os.getenv("GROQ_MODEL"),
+            messages=[
+                {"role": "system", "content": str(GROK_PROMPT)},
+                {
+                    "role": "user",
+                    "content": full_response,
+                },
+            ],
+            temperature=0,
+            stream=True,
+        )
+        cleaned_response = ""
+        async for chunk in cleaned_response_stream:
+            content = chunk.choices[0].delta.content
+            if content:
+                cleaned_response += content
 
-        await final_answer.stream_token(content)
-    await final_answer.send()
+        await cl.Message(content=cleaned_response).send()
+    else:
+        final_answer = cl.Message(content="")
+        async for chunk in stream:
+            content = chunk.get("message", {}).get("content")
+            if content:
+                await final_answer.stream_token(content)
+        await final_answer.send()

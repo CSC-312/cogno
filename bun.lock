@@ -2,12 +2,12 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "chainlit-datalayer",
+"name": "chainlit-datalayer",
       "dependencies": {
-        "@prisma/client": "^6.15.0",
+        "@prisma/client": "^6.16.2",
       },
       "devDependencies": {
-        "prisma": "^6.15.0",
+        "prisma": "^6.16.2",
       },
     },
   },
