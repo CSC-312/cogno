@@ -195,9 +195,12 @@ async def on_message(msg: cl.Message):
         msg.content = f"/bypass {msg.content}"
 
     logger.debug(f"Command: {msg.command}, Content: {msg.content}")
+    messages = cl.user_session.get("chat_history", [])
+    messages.append({"role": "user", "content": msg.content})
+
     stream = await ollama.chat(
         model=os.getenv("OLLAMA_MODEL"),
-        messages=[{"role": "user", "content": msg.content}],
+        messages=messages,
         stream=True,
     )
     if msg.command == "search":
@@ -227,9 +230,20 @@ async def on_message(msg: cl.Message):
 
         await cl.Message(content=cleaned_response).send()
     else:
+        final_answer_content = ""
         final_answer = cl.Message(content="")
         async for chunk in stream:
             content = chunk.get("message", {}).get("content")
             if content:
+                final_answer_content += content
                 await final_answer.stream_token(content)
         await final_answer.send()
+
+    # Store the user message and the assistant's response in the chat history
+    chat_history = cl.user_session.get("chat_history", [])
+    chat_history.append({"role": "user", "content": msg.content})
+    if msg.command == "search":
+        chat_history.append({"role": "assistant", "content": cleaned_response})
+    else:
+        chat_history.append({"role": "assistant", "content": final_answer_content})
+    cl.user_session.set("chat_history", chat_history)
