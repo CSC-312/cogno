@@ -239,7 +239,6 @@ async def on_message(msg: cl.Message):
                 await final_answer.stream_token(content)
         await final_answer.send()
 
-    # Store the user message and the assistant's response in the chat history
     chat_history = cl.user_session.get("chat_history", [])
     chat_history.append({"role": "user", "content": msg.content})
     if msg.command == "search":
