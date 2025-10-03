@@ -158,7 +158,7 @@ async def start():
                 "id": "search",
                 "name": "Search",
                 "description": "Search for information about the University of the Western Cape",
-                "icon": "folder-search",
+                "icon": "scan-search",
                 "button": True,
                 "persistent": True,
             }

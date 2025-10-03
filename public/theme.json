@@ -1,23 +1,6 @@
 {
   "custom_fonts": [
-    {
-      "name": "Geist",
-      "src": "/fonts/Geist/Geist-Variable.woff2",
-      "weight": "100 900",
-      "style": "normal"
-    },
-    {
-      "name": "Castoro",
-      "src": "/fonts/Castoro/Castoro-Regular.woff2",
-      "weight": "400",
-      "style": "normal"
-    },
-    {
-      "name": "Google Sans Code",
-      "src": "/fonts/GoogleSansCode/GoogleSansCode-Regular.woff2",
-      "weight": "400",
-      "style": "normal"
-    }
+    "https://fonts.googleapis.com/css2?family=Geist:wght@500&family=JetBrains+Mono:wght@500&family=PT+Serif&display=swap"
   ],
   "variables": {
     "light": {
@@ -49,22 +32,28 @@
       "--sidebar-foreground": "210 88.8889% 10.5882%",
       "--sidebar-primary": "201.9608 100% 30%",
       "--sidebar-primary-foreground": "205.7143 25.9259% 94.7059%",
-      "--sidebar-accent": "201.9608 100% 30%",
-      "--sidebar-accent-foreground": "205.7143 25.9259% 94.7059%",
-      "--sidebar-border": "208.2353 23.9437% 86.0784%",
-      "--sidebar-ring": "201.9608 100% 30%",
-      "--font-sans": "Geist, ui-sans-serif, sans-serif, system-ui",
-      "--font-serif": "Castoro, ui-serif, serif",
-      "--font-mono": "Google Sans Code, ui-monospace, monospace",
+      "--sidebar-accent": "211.5789 51.3514% 92.7451%",
+      "--sidebar-accent-foreground": "203.8863 88.2845% 53.1373%",
+      "--sidebar-border": "205.0000 25.0000% 90.5882%",
+      "--sidebar-ring": "202.8169 89.1213% 53.1373%",
+      "--font-sans": "Geist, ui-sans-serif, system-ui, -apple-system, Roboto",
+      "--font-serif": "PT Serif, ui-serif, Georgia, Times, serif",
+      "--font-mono": "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace",
       "--radius": "1rem",
-      "--shadow-2xs": "0px 4px 10px 0px hsl(240 30% 25% / 0.06)",
-      "--shadow-xs": "0px 4px 10px 0px hsl(240 30% 25% / 0.06)",
-      "--shadow-sm": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 1px 2px -1px hsl(240 30% 25% / 0.12)",
-      "--shadow": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 1px 2px -1px hsl(240 30% 25% / 0.12)",
-      "--shadow-md": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 2px 4px -1px hsl(240 30% 25% / 0.12)",
-      "--shadow-lg": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 4px 6px -1px hsl(240 30% 25% / 0.12)",
-      "--shadow-xl": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 8px 10px -1px hsl(240 30% 25% / 0.12)",
-      "--shadow-2xl": "0px 4px 10px 0px hsl(240 30% 25% / 0.30)",
+      "--shadow-x": "0rem",
+      "--shadow-y": "0.25rem",
+      "--shadow-blur": "0.5rem",
+      "--shadow-spread": "0rem",
+      "--shadow-opacity": "0.1",
+      "--shadow-color": "#000",
+      "--shadow-2xs": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.05)",
+      "--shadow-xs": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.05)",
+      "--shadow-sm": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.10), 0rem 1px 2px -1px hsl(0 0% 0% / 0.10)",
+      "--shadow": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.10), 0rem 1px 2px -1px hsl(0 0% 0% / 0.10)",
+      "--shadow-md": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.10), 0rem 2px 4px -1px hsl(0 0% 0% / 0.10)",
+      "--shadow-lg": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.10), 0rem 4px 6px -1px hsl(0 0% 0% / 0.10)",
+      "--shadow-xl": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.10), 0rem 8px 10px -1px hsl(0 0% 0% / 0.10)",
+      "--shadow-2xl": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.25)",
       "--tracking-normal": "0em",
       "--spacing": "0.25rem"
     },
@@ -101,18 +90,24 @@
       "--sidebar-accent-foreground": "210.0000 16.6667% 92.9412%",
       "--sidebar-border": "211.4286 14.6853% 28.0392%",
       "--sidebar-ring": "201.9608 100% 30%",
-      "--font-sans": "Geist, ui-sans-serif, sans-serif, system-ui",
-      "--font-serif": "Castoro, ui-serif, serif",
-      "--font-mono": "Google Sans Code, ui-monospace, monospace",
-      "--radius": "1rem",
-      "--shadow-2xs": "0px 4px 10px 0px hsl(240 30% 25% / 0.06)",
-      "--shadow-xs": "0px 4px 10px 0px hsl(240 30% 25% / 0.06)",
-      "--shadow-sm": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 1px 2px -1px hsl(240 30% 25% / 0.12)",
-      "--shadow": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 1px 2px -1px hsl(240 30% 25% / 0.12)",
-      "--shadow-md": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 2px 4px -1px hsl(240 30% 25% / 0.12)",
-      "--shadow-lg": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 4px 6px -1px hsl(240 30% 25% / 0.12)",
-      "--shadow-xl": "0px 4px 10px 0px hsl(240 30% 25% / 0.12), 0px 8px 10px -1px hsl(240 30% 25% / 0.12)",
-      "--shadow-2xl": "0px 4px 10px 0px hsl(240 30% 25% / 0.30)"
+      "--font-sans": "Geist, ui-sans-serif, system-ui, -apple-system, Roboto",
+      "--font-serif": "PT Serif, ui-serif, Georgia, Times, serif",
+      "--font-mono": "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, monospace",
+      "--radius": "1.3rem",
+      "--shadow-x": "0rem",
+      "--shadow-y": "0.25rem",
+      "--shadow-blur": "0.5rem",
+      "--shadow-spread": "0rem",
+      "--shadow-opacity": "0.15",
+      "--shadow-color": "#000",
+      "--shadow-2xs": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.07)",
+      "--shadow-xs": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.07)",
+      "--shadow-sm": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.15), 0rem 1px 2px -1px hsl(0 0% 0% / 0.15)",
+      "--shadow": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.15), 0rem 1px 2px -1px hsl(0 0% 0% / 0.15)",
+      "--shadow-md": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.15), 0rem 2px 4px -1px hsl(0 0% 0% / 0.15)",
+      "--shadow-lg": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.15), 0rem 4px 6px -1px hsl(0 0% 0% / 0.15)",
+      "--shadow-xl": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.15), 0rem 8px 10px -1px hsl(0 0% 0% / 0.15)",
+      "--shadow-2xl": "0rem 0.25rem 0.5rem 0rem hsl(0 0% 0% / 0.38)"
     }
   }
 }

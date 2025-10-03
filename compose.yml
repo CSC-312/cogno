@@ -27,11 +27,26 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: ${DATABASE_URL}
-      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL}
-      OAUTH_GOOGLE_CLIENT_ID: ${OAUTH_GOOGLE_CLIENT_ID}
-      OAUTH_GOOGLE_CLIENT_SECRET: ${OAUTH_GOOGLE_CLIENT_SECRET}
-      OAUTH_GOOGLE_REDIRECT_URI: ${OAUTH_GOOGLE_REDIRECT_URI}
+      OAUTH_AUTH0_CLIENT_ID: ${OAUTH_AUTH0_CLIENT_ID}
+      OAUTH_AUTH0_CLIENT_SECRET: ${OAUTH_AUTH0_CLIENT_SECRET}
+      OAUTH_AUTH0_DOMAIN: ${OAUTH_AUTH0_DOMAIN}
+
       CHAINLIT_AUTH_SECRET: ${CHAINLIT_AUTH_SECRET}
+      OLLAMA_MODEL: ${OLLAMA_MODEL}
+      OLLAMA_API_KEY: ${OLLAMA_API_KEY}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL}
+
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      GROQ_BASE_URL: ${GROQ_BASE_URL}
+      GROQ_MODEL: ${GROQ_MODEL}
+      GROQ_WHISPER_MODEL: ${GROQ_WHISPER_MODEL}
+
+      BUCKET_NAME: ${BUCKET_NAME}
+      APP_AWS_ACCESS_KEY: ${APP_AWS_ACCESS_KEY}
+      APP_AWS_SECRET_KEY: ${APP_AWS_SECRET_KEY}
+      APP_AWS_REGION: ${APP_AWS_REGION}
+      DEV_AWS_ENDPOINT: ${DEV_AWS_ENDPOINT}
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -43,7 +58,7 @@ services:
         echo 'Waiting for DB to be ready...' &&
         npx prisma migrate deploy &&
         echo 'Starting Chainlit...' &&
-        uv run chainlit run frontend/main.py --host 0.0.0.0 --port 8000
+        uv run chainlit -w run frontend/main.py --host 0.0.0.0 --port 8000
       "
 
 volumes:
