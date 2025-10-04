@@ -1,4 +1,3 @@
-import io
 import os
 import tempfile
 from pathlib import Path
@@ -8,12 +7,14 @@ import chainlit as cl
 
 try:
     from pypdf import PdfReader  # type: ignore
+
     PDF_AVAILABLE = True
 except Exception:
     PDF_AVAILABLE = False
 
 try:
     from docx import Document  # type: ignore
+
     DOCX_AVAILABLE = True
 except Exception:
     DOCX_AVAILABLE = False
@@ -56,15 +57,16 @@ async def extract_documents_text(files: List[cl.File]) -> str:
                     tmp.write(raw)
                     p = tmp.name
                 doc = Document(p)  # type: ignore
-                text_lines = [p.text.strip() for p in doc.paragraphs if p.text and p.text.strip()]
+                text_lines = [
+                    p.text.strip() for p in doc.paragraphs if p.text and p.text.strip()
+                ]
                 os.unlink(p)
                 if text_lines:
                     parts.append(f"**{name}**\n" + "\n".join(text_lines))
             else:
-                # Unsupported or missing dependencies; skip silently but log
-                cl.logger.info(f"Skipped document {name} (ext={ext}, available: PDF={PDF_AVAILABLE}, DOCX={DOCX_AVAILABLE})")
+                cl.logger.info(
+                    f"Skipped document {name} (ext={ext}, available: PDF={PDF_AVAILABLE}, DOCX={DOCX_AVAILABLE})"
+                )
         except Exception as e:  # defensive
             cl.logger.error(f"Error reading document {name}: {e}")
     return "\n\n".join(parts)
-
-
