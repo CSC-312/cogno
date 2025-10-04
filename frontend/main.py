@@ -10,7 +10,10 @@ from ollama import AsyncClient
 from openai import AsyncOpenAI
 from prompts import GROK_PROMPT
 
-logging.basicConfig(level=logging.DEBUG)
+from frontend.document_processor import extract_documents_text
+from frontend.vision_client import VisionClient
+
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 ollama = AsyncClient(
@@ -191,8 +194,60 @@ async def on_message(msg: cl.Message):
 
     if msg.command == "search":
         msg.content = f"/hybrid {msg.content}"
+        logger.info(f"User sent this message: {msg.content}")
     else:
+        uploads = list(msg.elements or [])
+        if getattr(msg, "files", None):
+            uploads.extend(msg.files or [])
+        docs = [
+            f
+            for f in uploads
+            if str(f.name).lower().endswith((".pdf", ".docx", ".doc"))
+        ]
+        imgs = [
+            f
+            for f in uploads
+            if not str(f.name).lower().endswith((".pdf", ".docx", ".doc"))
+        ]
+        context_summary = ""
+        if docs or imgs:
+            docs_text = await extract_documents_text(docs)
+            img_summary = ""
+            if imgs:
+                vision = VisionClient()
+                img_bytes = []
+                for f in imgs:
+                    raw = getattr(f, "content", None)
+                    if not raw and getattr(f, "path", None):
+                        with open(f.path, "rb") as fh:
+                            raw = fh.read()
+                    if isinstance(raw, (bytes, bytearray)):
+                        img_bytes.append(bytes(raw))
+                if img_bytes:
+                    img_summary = await vision.summarize_images_async(
+                        img_bytes,
+                        prompt="Provide a concise description and key details.",
+                    )
+
+            bits = []
+            if docs_text:
+                bits.append(
+                    f"The user uploaded a document containing this text\n{docs_text}"
+                )
+            if img_summary:
+                bits.append(
+                    f"The user uploaded an image with these contents]\n{img_summary}"
+                )
+            if bits:
+                context_summary = "\n\n".join(bits)
+
+        msg.content = msg.content + f"{context_summary}"
         msg.content = f"/bypass {msg.content}"
+        logger.debug(f"{context_summary}")
+        logger.info(
+            f"Number of uploads:{len(uploads)}, number of images:{len(imgs)}, number: of docs: {len(docs)}"
+        )
+        logger.debug(f"User sent this message: {msg.content}")
 
     logger.debug(f"Command: {msg.command}, Content: {msg.content}")
     messages = cl.user_session.get("chat_history", [])
