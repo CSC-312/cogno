@@ -16,9 +16,16 @@ allow_thread_sharing = true
 
 [features.spontaneous_file_upload]
 enabled = true
-accept = ["image/*", "application/pdf"]
-max_files = 6
-max_size_mb = 2
+accept = [
+  "image/*",
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/msword",
+  "application/octet-stream"
+]
+accept_extensions = { "application/octet-stream" = [".docx", ".doc"] }
+max_files = 2
+max_size_mb = 5
 
 [features.audio]
 enabled = true
