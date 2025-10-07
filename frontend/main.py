@@ -9,10 +9,10 @@ import chainlit as cl
 import numpy as np
 from ollama import AsyncClient
 from openai import AsyncOpenAI
-from .prompts import GROK_PROMPT, system_prompt
 
-from .document_processor import extract_documents_text
-from .vision_client import VisionClient
+from frontend.prompts import GROK_PROMPT, system_prompt
+from frontend.document_processor import extract_documents_text
+from frontend.vision_client import VisionClient
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
