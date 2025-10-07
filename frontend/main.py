@@ -2,19 +2,22 @@ import io
 import logging
 import os
 import wave
+from datetime import datetime
 from typing import Any, Dict, Optional
 
 import chainlit as cl
 import numpy as np
 from ollama import AsyncClient
 from openai import AsyncOpenAI
-from prompts import GROK_PROMPT
+from .prompts import GROK_PROMPT, system_prompt
 
-from frontend.document_processor import extract_documents_text
-from frontend.vision_client import VisionClient
+from .document_processor import extract_documents_text
+from .vision_client import VisionClient
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+SYSTEM_PROMPT = system_prompt + f"{datetime.now()}"
 
 ollama = AsyncClient(
     host=os.getenv("OLLAMA_BASE_URL"),
@@ -251,7 +254,12 @@ async def on_message(msg: cl.Message):
 
     logger.debug(f"Command: {msg.command}, Content: {msg.content}")
     messages = cl.user_session.get("chat_history", [])
-    messages.append({"role": "user", "content": msg.content})
+
+    messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        *messages,
+        {"role": "user", "content": msg.content},
+    ]
 
     stream = await ollama.chat(
         model=os.getenv("OLLAMA_MODEL"),
