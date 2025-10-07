@@ -30,3 +30,7 @@ Cogno is a helpful chatbot designed specifically for students, staff, and visito
 | Adam Peter van Blerk | 4352672        | 4352672@myuwc.ac.za |
 | Khaka Nyiba          | 4202375        | 4202375@myuwc.ac.za |
 | Lunga Kubheka        | 4253243        | 4253243@myuwc.ac.za |
+
+### Scan the QR code
+
+![Scan the QR code](public/qr-code.svg)

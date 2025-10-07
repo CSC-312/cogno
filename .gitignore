@@ -1,5 +1,6 @@
 .env
 .data
 node_modules/
+__pycache__
 .files
 public/.files
