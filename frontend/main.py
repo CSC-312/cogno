@@ -17,8 +17,6 @@ from .vision_client import VisionClient
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-SYSTEM_PROMPT = system_prompt + f"{datetime.now()}"
-
 ollama = AsyncClient(
     host=os.getenv("OLLAMA_BASE_URL"),
     headers={"Authorization": f"Bearer {os.getenv('OLLAMA_API_KEY')}"},
@@ -256,7 +254,7 @@ async def on_message(msg: cl.Message):
     messages = cl.user_session.get("chat_history", [])
 
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": str(system_prompt + f"{datetime.now()}")},
         *messages,
         {"role": "user", "content": msg.content},
     ]
