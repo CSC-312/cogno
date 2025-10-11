@@ -10,9 +10,9 @@ import numpy as np
 from ollama import AsyncClient
 from openai import AsyncOpenAI
 
-from frontend.prompts import GROK_PROMPT, system_prompt
-from frontend.document_processor import extract_documents_text
-from frontend.vision_client import VisionClient
+from frontend.prompts import GROQ_PROMPT, system_prompt
+from frontend.documents import extract_documents_text
+from frontend.vision import Vision
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -215,7 +215,7 @@ async def on_message(msg: cl.Message):
             docs_text = await extract_documents_text(docs)
             img_summary = ""
             if imgs:
-                vision = VisionClient()
+                vision = Vision()
                 img_bytes = []
                 for f in imgs:
                     raw = getattr(f, "content", None)
@@ -274,7 +274,7 @@ async def on_message(msg: cl.Message):
         cleaned_response_stream = await groq.chat.completions.create(
             model=os.getenv("GROQ_MODEL"),
             messages=[
-                {"role": "system", "content": str(GROK_PROMPT)},
+                {"role": "system", "content": str(GROQ_PROMPT)},
                 {
                     "role": "user",
                     "content": full_response,
