@@ -5,7 +5,7 @@ from typing import Any, Dict, List
 from openai import AsyncOpenAI
 
 
-class VisionClient:
+class Vision:
     """Send images to an OpenAI-compatible vision model (Gemini 2.5 Flash Lite)."""
 
     def __init__(self) -> None:

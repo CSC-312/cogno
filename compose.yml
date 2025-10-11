@@ -56,7 +56,7 @@ services:
     command: >
       sh -c "
         echo 'Waiting for DB to be ready...' &&
-        npx prisma migrate deploy &&
+        bunx prisma migrate deploy &&
         echo 'Starting Chainlit...' &&
         uv run chainlit run frontend/main.py -w --host 0.0.0.0 --port 8000
       "

@@ -1,4 +1,4 @@
-GROK_PROMPT = """
+GROQ_PROMPT = """
 
 You are a text cleaning assistant. Your task is to remove any citations/references from the given text or references to files (ie. .txt, pdf).**5. Reference Section Example:**
 
