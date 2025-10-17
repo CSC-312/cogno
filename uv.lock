@@ -444,7 +444,7 @@ wheels = [
 
 [[package]]
 name = "cogno"
-version = "0.0.1"
+version = "0.0.5"
 source = { virtual = "." }
 dependencies = [
     { name = "asyncpg" },
