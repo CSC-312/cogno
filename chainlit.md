@@ -1,6 +1,6 @@
 Cogno is a helpful chatbot designed specifically for students, staff, and visitors of the University of the Western Cape (UWC) in South Africa.
 
-## What does Cogno do?
+### What does Cogno do?
 
 - **Answers your questions** about UWC - whether it's about admissions, campus facilities, services, or general university information
 - **Supports voice input** - you can speak your questions instead of typing them
@@ -11,14 +11,14 @@ Cogno is a helpful chatbot designed specifically for students, staff, and visito
   - Contact information for university services
   - Sports and activities available
 
-## How to use Cogno
+### How to use Cogno
 
 1. **Type your question** in the chat box about anything related to UWC
 2. **Use voice input** by clicking the microphone button and speaking your question
 3. **Click on starter questions** for quick answers to common queries
 4. **Use the Search command** to look up specific information about the university
 
-## Contact Us
+### Contact Us
 
 | Name                 | Student Number | Email               |
 | -------------------- | -------------- | ------------------- |
