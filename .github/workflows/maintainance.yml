@@ -1,21 +1,34 @@
-name: Dependabot auto-approve
+name: Dependabot auto-merge
 on: pull_request
 
 permissions:
+  contents: write
   pull-requests: write
 
 jobs:
   dependabot:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'CSC312/cogno'
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'CSC-312/cogno'
     steps:
       - name: Dependabot metadata
         id: metadata
         uses: dependabot/fetch-metadata@d7267f607e9d3fb96fc2fbe83e0af444713e90b7
         with:
           github-token: "${{ secrets.GH_TOKEN }}"
-      - name: Approve a PR
-        run: gh pr review --approve "$PR_URL"
+      - name: Enable auto-merge for Dependabot PRs
+        if: |
+          (
+            contains(steps.metadata.outputs.dependency-names, 'asyncpg') ||
+            contains(steps.metadata.outputs.dependency-names, 'boto3') ||
+            contains(steps.metadata.outputs.dependency-names, 'chainlit') ||
+            contains(steps.metadata.outputs.dependency-names, 'google-auth') ||
+            contains(steps.metadata.outputs.dependency-names, 'numpy') ||
+            contains(steps.metadata.outputs.dependency-names, 'ollama') ||
+            contains(steps.metadata.outputs.dependency-names, 'pypdf') ||
+            contains(steps.metadata.outputs.dependency-names, 'python-docx') ||
+            contains(steps.metadata.outputs.dependency-names, 'openai')
+          ) && steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: gh pr merge --auto --merge "$PR_URL"
         env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.GH_TOKEN}}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
