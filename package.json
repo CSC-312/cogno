@@ -5,7 +5,7 @@
   "author": "Chainlit",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^6.18.0"
+    "@prisma/client": "^6.19.0"
   },
   "devDependencies": {
     "prisma": "^6.19.0"
